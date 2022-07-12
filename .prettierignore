@@ -1,0 +1,14 @@
+*.svg
+*.png
+*.jpg
+*.ico
+*.hbs
+*.txt
+*.yml
+
+yarn.lock
+.eslintignore
+.prettierignore
+.nvmrc
+.gitignore
+.husky
