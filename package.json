@@ -17,12 +17,14 @@
     "@hookform/resolvers": "^2.9.1",
     "eslint-plugin-import-helpers": "^1.2.1",
     "framer-motion": "^6",
+    "immer": "^9.0.15",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-hook-form": "^7.32.2",
     "react-lazily": "^0.9.1",
     "react-router-dom": "^6.3.0",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
