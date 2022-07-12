@@ -8,7 +8,7 @@ type AuthenticationProps = {
 };
 
 type UseBankingPaymentMethodActions = {
-  login: (username: string, password: string) => void;
+  login: () => void;
   logout: () => void;
 };
 
