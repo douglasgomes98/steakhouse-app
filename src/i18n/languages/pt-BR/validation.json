@@ -1,0 +1,6 @@
+{
+  "validation.emailRequired": "E-mail é um campo obrigatório",
+  "validation.emailInvalid": "E-mail inválido",
+  "validation.passwordRequired": "Senha é um campo obrigatório",
+  "validation.passwordMinLength": "Senha deve ter pelo menos 8 caracteres"
+}
