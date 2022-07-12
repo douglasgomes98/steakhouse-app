@@ -25,7 +25,7 @@ export function AppRoutes() {
         />
 
         <Route
-          path={routes.login}
+          path={routes.dashboard}
           element={
             <ProtectedRoute>
               <Dashboard />

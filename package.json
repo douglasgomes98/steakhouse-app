@@ -25,6 +25,7 @@
     "react-dom": "^18.0.0",
     "react-hook-form": "^7.32.2",
     "react-i18next": "^11.18.0",
+    "react-icons": "^4.4.0",
     "react-lazily": "^0.9.1",
     "react-router-dom": "^6.3.0",
     "yup": "^0.32.11",

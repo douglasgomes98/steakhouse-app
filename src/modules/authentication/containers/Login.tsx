@@ -8,6 +8,9 @@ import {
   Button,
   Flex,
   useToast,
+  InputGroup,
+  InputRightElement,
+  IconButton,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -15,10 +18,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { parseQueryParams } from '@/helpers/parseQueryParams';
 import { routes } from '@/routers/constants/routes';
 import { useAuthentication } from '@/hooks/useAuthentication';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 type FormData = {
   email: string;
@@ -40,6 +44,8 @@ export function Login() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const redirectUrl = useMemo(() => {
     const params = parseQueryParams(location.search)?.redirect;
@@ -88,8 +94,8 @@ export function Login() {
   return (
     <Flex align="center" justify="center" h="100vh">
       <Box w="20rem">
-        <Heading as="h2" size="xl">
-          Login
+        <Heading as="h2" size="xl" mb="8">
+          {t('login.pageTitle')}
         </Heading>
 
         <form onSubmit={onSubmit}>
@@ -110,12 +116,28 @@ export function Login() {
             <FormLabel htmlFor="password">
               {t('common.inputPasswordLabel')}
             </FormLabel>
-            <Input
-              id="password"
-              type="password"
-              placeholder={t('common.inputPasswordPlaceholder')}
-              {...register('password')}
-            />
+            <InputGroup>
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder={t('common.inputPasswordPlaceholder')}
+                {...register('password')}
+              />
+              <InputRightElement width="2rem">
+                <IconButton
+                  icon={
+                    showPassword ? (
+                      <AiOutlineEyeInvisible size="1.5rem" />
+                    ) : (
+                      <AiOutlineEye size="1.5rem" />
+                    )
+                  }
+                  aria-label="icon-password"
+                  variant="unstyled"
+                  onClick={() => setShowPassword(prevState => !prevState)}
+                />
+              </InputRightElement>
+            </InputGroup>
             {errors.password && (
               <FormErrorMessage>{errors.password.message}</FormErrorMessage>
             )}

@@ -1,4 +1,5 @@
 {
   "login.invalidCredentials": "Senha incorreta",
-  "login.loginButtonLabel": "Entrar"
+  "login.loginButtonLabel": "Entrar",
+  "login.pageTitle": "Steakhouse App"
 }
