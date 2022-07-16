@@ -2,7 +2,7 @@ import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import produce from 'immer';
 
-type AuthenticationProps = {
+type UseAuthenticationProps = {
   isAuthenticated: boolean;
   actions: UseBankingPaymentMethodActions;
 };
@@ -12,16 +12,16 @@ type UseBankingPaymentMethodActions = {
   logout: () => void;
 };
 
-type InitialState = Omit<AuthenticationProps, 'actions'>;
+type InitialState = Omit<UseAuthenticationProps, 'actions'>;
 
 const initialState: InitialState = {
   isAuthenticated: false,
 };
 
 export const useAuthentication = create(
-  persist<AuthenticationProps>(
+  persist<UseAuthenticationProps>(
     set => {
-      const setState = (fn: (state: AuthenticationProps) => void) =>
+      const setState = (fn: (state: UseAuthenticationProps) => void) =>
         set(produce(fn));
 
       return {

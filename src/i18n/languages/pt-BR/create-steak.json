@@ -1,4 +1,6 @@
 {
   "create-steak.pageTitle": "Criando Churras",
-  "create-steak.createSteakButtonLabel": "Criar Churras"
+  "create-steak.createSteakButtonLabel": "Criar Churras",
+  "create-steak.createSteakSuccessMessage": "Churras criado com sucesso!",
+  "create-steak.cancelCreateSteakButtonLabel": "Cancelar"
 }

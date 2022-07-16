@@ -7,3 +7,4 @@ export * from './formatDate';
 export * from './mountQueryParams';
 export * from './parseDate';
 export * from './parseQueryParams';
+export * from './generateId';

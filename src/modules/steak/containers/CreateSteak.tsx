@@ -8,6 +8,7 @@ import {
   FormLabel,
   Heading,
   Input,
+  useToast,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -22,6 +23,9 @@ import {
 } from '@/helpers';
 import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
+import { useSteaks } from '@/hooks';
+import { useNavigate } from 'react-router-dom';
+import { routes } from '@/routers/constants/routes';
 
 type FormData = {
   description: string;
@@ -55,6 +59,7 @@ const schema = yup.object().shape({
 
 export function CreateSteak() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -70,9 +75,26 @@ export function CreateSteak() {
     shouldFocusError: true,
   });
 
+  const { actions } = useSteaks();
+
+  const toast = useToast({
+    position: 'top-right',
+  });
+
   const onSubmit = handleSubmit(async ({ description, date }) => {
-    // eslint-disable-next-line no-console
-    console.log(description, parseDate(date, 'brazilian'));
+    actions.createSteak({
+      description,
+      date: parseDate(date, 'brazilian') as Date,
+    });
+
+    toast({
+      title: t('create-steak.createSteakSuccessMessage'),
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    });
+
+    navigate(routes.dashboard);
   });
 
   function handleInputChange(value: string, key: keyof FormData) {
@@ -123,8 +145,12 @@ export function CreateSteak() {
               )}
             </FormControl>
 
-            <Button type="submit" w="100%">
+            <Button type="submit" w="100%" mb="4">
               {t('create-steak.createSteakButtonLabel')}
+            </Button>
+
+            <Button variant="outline" w="100%" onClick={() => navigate(-1)}>
+              {t('create-steak.cancelCreateSteakButtonLabel')}
             </Button>
           </form>
         </Box>
