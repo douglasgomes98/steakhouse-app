@@ -1,11 +1,80 @@
 import { Header } from '@/modules/shared/components/Header';
 import { Container, Center, Heading, Wrap, WrapItem } from '@chakra-ui/react';
 import { CreateSteakButton } from './components/CreateSteakButton';
-import { SteakCard } from './components/SteakCard';
+import { SteakCard, SteakCardProps } from './components/SteakCard';
+
+const steaks: SteakCardProps[] = [
+  {
+    date: new Date(),
+    description: 'Sem motivo',
+    amountPeople: 15,
+    amountCollected: 100,
+  },
+  {
+    date: new Date(),
+    description: 'Sem motivo',
+    amountPeople: 15,
+    amountCollected: 100,
+  },
+  {
+    date: new Date(),
+    description: 'Sem motivo',
+    amountPeople: 15,
+    amountCollected: 100,
+  },
+  {
+    date: new Date(),
+    description: 'Sem motivo',
+    amountPeople: 15,
+    amountCollected: 100,
+  },
+  {
+    date: new Date(),
+    description: 'Sem motivo',
+    amountPeople: 15,
+    amountCollected: 100,
+  },
+  {
+    date: new Date(),
+    description: 'Sem motivo',
+    amountPeople: 15,
+    amountCollected: 100,
+  },
+  {
+    date: new Date(),
+    description: 'Sem motivo',
+    amountPeople: 15,
+    amountCollected: 100,
+  },
+  {
+    date: new Date(),
+    description: 'Sem motivo',
+    amountPeople: 15,
+    amountCollected: 100,
+  },
+  {
+    date: new Date(),
+    description: 'Sem motivo',
+    amountPeople: 15,
+    amountCollected: 100,
+  },
+  {
+    date: new Date(),
+    description: 'Sem motivo',
+    amountPeople: 15,
+    amountCollected: 100,
+  },
+  {
+    date: new Date(),
+    description: 'Sem motivo',
+    amountPeople: 15,
+    amountCollected: 100,
+  },
+];
 
 export function Dashboard() {
   return (
-    <Container maxW="container.lg">
+    <Container maxW="container.lg" pb="8">
       <Header />
 
       <Center pb="8">
@@ -13,30 +82,16 @@ export function Dashboard() {
       </Center>
 
       <Wrap justify="center" spacing="3" pt="4" pb="4" pl="1" pr="1">
-        <WrapItem>
-          <SteakCard />
-        </WrapItem>
-        <WrapItem>
-          <SteakCard />
-        </WrapItem>
-        <WrapItem>
-          <SteakCard />
-        </WrapItem>
-        <WrapItem>
-          <SteakCard />
-        </WrapItem>
-        <WrapItem>
-          <SteakCard />
-        </WrapItem>
-        <WrapItem>
-          <SteakCard />
-        </WrapItem>
-        <WrapItem>
-          <SteakCard />
-        </WrapItem>
-        <WrapItem>
-          <SteakCard />
-        </WrapItem>
+        {steaks.map(({ date, description, amountPeople, amountCollected }) => (
+          <WrapItem>
+            <SteakCard
+              date={date}
+              description={description}
+              amountPeople={amountPeople}
+              amountCollected={amountCollected}
+            />
+          </WrapItem>
+        ))}
         <WrapItem>
           <CreateSteakButton />
         </WrapItem>

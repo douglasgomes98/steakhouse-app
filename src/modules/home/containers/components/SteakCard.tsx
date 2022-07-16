@@ -1,3 +1,5 @@
+import { formatCurrency } from '@/helpers/formatCurrency';
+import { formatDate } from '@/helpers/formatDate';
 import { Button, Flex, Heading, Text, Icon } from '@chakra-ui/react';
 import { FaUsers } from 'react-icons/fa';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri';
@@ -9,7 +11,12 @@ export type SteakCardProps = {
   amountCollected: number;
 };
 
-export function SteakCard() {
+export function SteakCard({
+  date,
+  description,
+  amountPeople,
+  amountCollected,
+}: SteakCardProps) {
   return (
     <Button
       minW="20rem"
@@ -25,12 +32,12 @@ export function SteakCard() {
     >
       <Flex mb="2">
         <Text fontSize="2xl" fontWeight="bold">
-          01/12
+          {formatDate(date, 'monthAndYear')}
         </Text>
       </Flex>
 
       <Flex mb="12">
-        <Heading fontSize="xl">Sem motivo</Heading>
+        <Heading fontSize="xl">{description}</Heading>
       </Flex>
 
       <Flex justify="space-between">
@@ -42,7 +49,7 @@ export function SteakCard() {
             height="1.5rem"
             width="1.5rem"
           />
-          <Text ml="2">15</Text>
+          <Text ml="2">{amountPeople}</Text>
         </Flex>
 
         <Flex align="center">
@@ -53,7 +60,7 @@ export function SteakCard() {
             height="1.5rem"
             width="1.5rem"
           />
-          <Text ml="2">R$140</Text>
+          <Text ml="2">{formatCurrency(amountCollected)}</Text>
         </Flex>
       </Flex>
     </Button>
