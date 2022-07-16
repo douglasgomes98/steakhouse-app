@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
-import { useAuthentication } from '@/hooks/useAuthentication';
-import { mountQueryParams } from '@/helpers/mountQueryParams';
+import { useAuthentication } from '@/hooks';
+import { mountQueryParams } from '@/helpers';
 import { redirectRoutesBlackList } from '../constants/redirectRoutesBlackList';
 import { routes } from '../constants/routes';
 

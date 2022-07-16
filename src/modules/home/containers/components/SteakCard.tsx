@@ -1,5 +1,4 @@
-import { formatCurrency } from '@/helpers/formatCurrency';
-import { formatDate } from '@/helpers/formatDate';
+import { formatCurrency, formatDate } from '@/helpers';
 import { Button, Flex, Heading, Text, Icon } from '@chakra-ui/react';
 import { FaUsers } from 'react-icons/fa';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri';

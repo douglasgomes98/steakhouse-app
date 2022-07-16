@@ -3,5 +3,9 @@
   "common.inputEmailPlaceholder": "Insira seu e-mail",
   "common.inputPasswordLabel": "Senha",
   "common.inputPasswordPlaceholder": "Insira sua senha",
-  "common.headerMessageLabel": "Seja bem vindo!"
+  "common.headerMessageLabel": "Seja bem vindo!",
+  "common.inputDescriptionLabel": "Descrição",
+  "common.inputDescriptionPlaceholder": "Insira a descrição",
+  "common.inputDateLabel": "Data",
+  "common.inputDatePlaceholder": "DD/MM/AAAA"
 }

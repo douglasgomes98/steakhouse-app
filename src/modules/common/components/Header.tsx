@@ -1,4 +1,4 @@
-import { useAuthentication } from '@/hooks/useAuthentication';
+import { useAuthentication } from '@/hooks';
 import { Flex, IconButton, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { FiLogOut } from 'react-icons/fi';

@@ -2,5 +2,8 @@
   "validation.emailRequired": "E-mail é um campo obrigatório",
   "validation.emailInvalid": "E-mail inválido",
   "validation.passwordRequired": "Senha é um campo obrigatório",
-  "validation.passwordMinLength": "Senha deve ter pelo menos 8 caracteres"
+  "validation.passwordMinLength": "Senha deve ter pelo menos 8 caracteres",
+  "validation.descriptionRequired": "Descrição é um campo obrigatório",
+  "validation.dateRequired": "Data é um campo obrigatório",
+  "validation.dateInvalid": "Data inválida"
 }

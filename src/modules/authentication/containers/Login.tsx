@@ -19,9 +19,9 @@ import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMemo, useState } from 'react';
-import { parseQueryParams } from '@/helpers/parseQueryParams';
+import { parseQueryParams } from '@/helpers';
 import { routes } from '@/routers/constants/routes';
-import { useAuthentication } from '@/hooks/useAuthentication';
+import { useAuthentication } from '@/hooks';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 type FormData = {
@@ -107,6 +107,7 @@ export function Login() {
               id="email"
               type="email"
               placeholder={t('common.inputEmailPlaceholder')}
+              autoFocus
               {...register('email')}
             />
             {errors.email && (

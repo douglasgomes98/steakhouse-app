@@ -1,8 +1,8 @@
 import { ReactNode, useMemo } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
-import { useAuthentication } from '@/hooks/useAuthentication';
-import { parseQueryParams } from '@/helpers/parseQueryParams';
+import { useAuthentication } from '@/hooks';
+import { parseQueryParams } from '@/helpers';
 import { routes } from '../constants/routes';
 
 export interface AuthRouteProps {

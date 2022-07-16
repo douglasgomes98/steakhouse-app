@@ -48,7 +48,9 @@
     "react/jsx-props-no-spreading": "off",
     "no-use-before-define": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "react/require-default-props": "off",
+    "react/jsx-no-bind": "off"
   },
   "settings": {
     "react": {
