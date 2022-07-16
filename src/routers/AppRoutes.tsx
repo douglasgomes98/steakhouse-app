@@ -11,6 +11,9 @@ const { Login } = lazily(
 const { Dashboard } = lazily(
   () => import('@/modules/home/containers/Dashboard'),
 );
+const { CreateSteak } = lazily(
+  () => import('@/modules/steak/containers/CreateSteak'),
+);
 
 export function AppRoutes() {
   return (
@@ -33,6 +36,17 @@ export function AppRoutes() {
             <Suspense fallback={<>loading...</>}>
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path={routes.createSteak}
+          element={
+            <Suspense fallback={<>loading...</>}>
+              <ProtectedRoute>
+                <CreateSteak />
               </ProtectedRoute>
             </Suspense>
           }

@@ -1,7 +1,13 @@
+import { routes } from '@/routers/constants/routes';
 import { Button, Icon, Text, Flex } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { MdOutdoorGrill } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
 export function CreateSteakButton() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
   return (
     <Button
       display="flex"
@@ -16,6 +22,7 @@ export function CreateSteakButton() {
       _hover={{
         bg: 'gray.200',
       }}
+      onClick={() => navigate(routes.createSteak)}
     >
       <Flex
         justify="center"
@@ -29,7 +36,7 @@ export function CreateSteakButton() {
       </Flex>
 
       <Text fontSize="xl" fontWeight="bold" mt="2">
-        Adicionar Churras
+        {t('dashboard.createSteakButtonLabel')}
       </Text>
     </Button>
   );

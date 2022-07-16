@@ -1,13 +1,15 @@
 import { useAuthentication } from '@/hooks/useAuthentication';
 import { Flex, IconButton, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { FiLogOut } from 'react-icons/fi';
 
 export function Header() {
+  const { t } = useTranslation();
   const { actions } = useAuthentication();
 
   return (
     <Flex justify="space-between" p="4">
-      <Text>Seja bem vindo!</Text>
+      <Text>{t('common.headerMessageLabel')}</Text>
 
       <IconButton
         aria-label="logoff"

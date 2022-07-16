@@ -1,1 +1,3 @@
-export const redirectRoutesBlackList = [];
+import { routes } from './routes';
+
+export const redirectRoutesBlackList = [routes.createSteak];
