@@ -84,6 +84,8 @@ export function Login() {
         duration: 5000,
         isClosable: true,
       });
+
+      return;
     }
 
     actions.login();
@@ -94,7 +96,7 @@ export function Login() {
   return (
     <Flex align="center" justify="center" h="100vh">
       <Box w="20rem">
-        <Heading as="h2" size="xl" mb="8">
+        <Heading as="h1" size="lg" mb="8" textAlign="center" fontWeight="bold">
           {t('login.pageTitle')}
         </Heading>
 
