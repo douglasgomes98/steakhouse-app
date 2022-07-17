@@ -13,6 +13,8 @@ export type Steak = {
   description: string;
   date: Date;
   observation?: string;
+  minValueWithoutBeerByPeople: number;
+  minValueWithBeerByPeople: number;
 };
 
 type CreateSteakData = Omit<Steak, 'id'>;

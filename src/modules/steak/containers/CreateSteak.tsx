@@ -27,11 +27,14 @@ import { useTranslation } from 'react-i18next';
 import { useSteaks } from '@/hooks';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '@/routers/constants/routes';
+import { CurrencyInput } from '@/modules/common/components/CurrencyInput';
 
 type FormData = {
   description: string;
   date: string;
   observation?: string;
+  minValueWithoutBeer: number;
+  minValueWithBeer: number;
 };
 
 const schema = yup.object().shape({
@@ -58,6 +61,14 @@ const schema = yup.object().shape({
       );
     }),
   observation: yup.string().nullable(),
+  minValueWithoutBeer: yup
+    .number()
+    .required(i18next.t('validation.minValueWithoutBeerRequired'))
+    .min(1, i18next.t('validation.minValueWithoutBeerInvalid')),
+  minValueWithBeer: yup
+    .number()
+    .required(i18next.t('validation.minValueWithBeerRequired'))
+    .min(1, i18next.t('validation.minValueWithBeerInvalid')),
 });
 
 export function CreateSteak() {
@@ -76,6 +87,10 @@ export function CreateSteak() {
     resolver: yupResolver<yup.AnyObjectSchema>(schema),
     shouldUnregister: true,
     shouldFocusError: true,
+    defaultValues: {
+      minValueWithoutBeer: 0,
+      minValueWithBeer: 0,
+    },
   });
 
   const { actions } = useSteaks();
@@ -84,24 +99,34 @@ export function CreateSteak() {
     position: 'top-right',
   });
 
-  const onSubmit = handleSubmit(async ({ description, date, observation }) => {
-    actions.createSteak({
+  const onSubmit = handleSubmit(
+    async ({
       description,
-      date: parseDate(date, 'brazilian') as Date,
+      date,
       observation,
-    });
+      minValueWithoutBeer,
+      minValueWithBeer,
+    }) => {
+      actions.createSteak({
+        description,
+        date: parseDate(date, 'brazilian') as Date,
+        observation,
+        minValueWithoutBeerByPeople: minValueWithoutBeer,
+        minValueWithBeerByPeople: minValueWithBeer,
+      });
 
-    toast({
-      title: t('create-steak.createSteakSuccessMessage'),
-      status: 'success',
-      duration: 5000,
-      isClosable: true,
-    });
+      toast({
+        title: t('create-steak.createSteakSuccessMessage'),
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
 
-    navigate(routes.dashboard);
-  });
+      navigate(routes.dashboard);
+    },
+  );
 
-  function handleInputChange(value: string, key: keyof FormData) {
+  function handleInputChange(value: any, key: keyof FormData) {
     setValue(key, value);
     trigger(key);
   }
@@ -161,6 +186,42 @@ export function CreateSteak() {
               {errors.observation && (
                 <FormErrorMessage>
                   {errors.observation.message}
+                </FormErrorMessage>
+              )}
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.minValueWithoutBeer} mb="4">
+              <FormLabel htmlFor="minValueWithoutBeer">
+                {t('common.inputMinValueWithoutBeerLabel')}
+              </FormLabel>
+              <CurrencyInput
+                id="minValueWithoutBeer"
+                placeholder={t('common.inputMinValueWithoutBeerPlaceholder')}
+                onValueChange={({ floatValue }) => {
+                  handleInputChange(floatValue, 'minValueWithoutBeer');
+                }}
+              />
+              {errors.minValueWithoutBeer && (
+                <FormErrorMessage>
+                  {errors.minValueWithoutBeer.message}
+                </FormErrorMessage>
+              )}
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.minValueWithBeer} mb="4">
+              <FormLabel htmlFor="minValueWithBeer">
+                {t('common.inputMinValueWithBeerLabel')}
+              </FormLabel>
+              <CurrencyInput
+                id="minValueWithBeer"
+                placeholder={t('common.inputMinValueWithBeerPlaceholder')}
+                onValueChange={({ floatValue }) => {
+                  handleInputChange(floatValue, 'minValueWithBeer');
+                }}
+              />
+              {errors.minValueWithBeer && (
+                <FormErrorMessage>
+                  {errors.minValueWithBeer.message}
                 </FormErrorMessage>
               )}
             </FormControl>

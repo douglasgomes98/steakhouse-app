@@ -50,7 +50,9 @@
     "@typescript-eslint/no-non-null-assertion": "off",
     "no-param-reassign": "off",
     "react/require-default-props": "off",
-    "react/jsx-no-bind": "off"
+    "react/jsx-no-bind": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "camelcase": "off"
   },
   "settings": {
     "react": {
