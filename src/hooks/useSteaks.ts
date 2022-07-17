@@ -12,6 +12,7 @@ export type Steak = {
   id: string;
   description: string;
   date: Date;
+  observation?: string;
 };
 
 type CreateSteakData = Omit<Steak, 'id'>;

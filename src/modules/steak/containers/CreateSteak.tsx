@@ -9,6 +9,7 @@ import {
   Heading,
   Input,
   useToast,
+  Textarea,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -30,6 +31,7 @@ import { routes } from '@/routers/constants/routes';
 type FormData = {
   description: string;
   date: string;
+  observation?: string;
 };
 
 const schema = yup.object().shape({
@@ -55,6 +57,7 @@ const schema = yup.object().shape({
         dateToStartDay(dateParsed),
       );
     }),
+  observation: yup.string().nullable(),
 });
 
 export function CreateSteak() {
@@ -81,10 +84,11 @@ export function CreateSteak() {
     position: 'top-right',
   });
 
-  const onSubmit = handleSubmit(async ({ description, date }) => {
+  const onSubmit = handleSubmit(async ({ description, date, observation }) => {
     actions.createSteak({
       description,
       date: parseDate(date, 'brazilian') as Date,
+      observation,
     });
 
     toast({
@@ -117,7 +121,7 @@ export function CreateSteak() {
               </FormLabel>
               <Input
                 id="description"
-                type="description"
+                type="text"
                 placeholder={t('common.inputDescriptionPlaceholder')}
                 autoFocus
                 {...register('description')}
@@ -142,6 +146,22 @@ export function CreateSteak() {
               />
               {errors.date && (
                 <FormErrorMessage>{errors.date.message}</FormErrorMessage>
+              )}
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.observation} mb="4">
+              <FormLabel htmlFor="observation">
+                {t('common.inputObservationLabel')}
+              </FormLabel>
+              <Textarea
+                id="observation"
+                placeholder={t('common.inputObservationPlaceholder')}
+                {...register('observation')}
+              />
+              {errors.observation && (
+                <FormErrorMessage>
+                  {errors.observation.message}
+                </FormErrorMessage>
               )}
             </FormControl>
 

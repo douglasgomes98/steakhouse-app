@@ -7,5 +7,7 @@
   "common.inputDescriptionLabel": "Descrição",
   "common.inputDescriptionPlaceholder": "Insira a descrição",
   "common.inputDateLabel": "Data",
-  "common.inputDatePlaceholder": "DD/MM/AAAA"
+  "common.inputDatePlaceholder": "DD/MM/AAAA",
+  "common.inputObservationLabel": "Observação",
+  "common.inputObservationPlaceholder": "Insira a observação"
 }
