@@ -8,10 +8,10 @@ import { Input, InputProps } from '@chakra-ui/react';
 
 type CustomInput = Omit<InputProps, 'value' | 'onChange' | 'ref'>;
 
-interface CustomMaskedInputProps {
+type CustomMaskedInputProps = {
   onChange?: (value: string) => void;
   value?: string;
-}
+};
 
 type CustomNumberFormatProps = Omit<
   NumberFormatPropsBase<unknown>,

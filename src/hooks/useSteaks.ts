@@ -8,6 +8,13 @@ type UseSteaksProps = {
   actions: UseSteaksMethodActions;
 };
 
+type People = {
+  id: string;
+  name: string;
+  amount: number;
+  isPayed: boolean;
+};
+
 export type Steak = {
   id: string;
   description: string;
@@ -15,13 +22,19 @@ export type Steak = {
   observation?: string;
   minValueWithoutBeerByPeople: number;
   minValueWithBeerByPeople: number;
+  amountPayed: number;
+  peoples: People[];
 };
 
-type CreateSteakData = Omit<Steak, 'id'>;
+type CreateSteakData = Omit<Steak, 'id' | 'peoples' | 'amountPayed'>;
+type CreatePeopleData = Omit<People, 'id' | 'isPayed'>;
 
 type UseSteaksMethodActions = {
   createSteak: (steak: CreateSteakData) => void;
   removeSteak: (id: string) => void;
+  addPeople: (people: CreatePeopleData, steakId: string) => void;
+  removePeople: (peopleId: string, steakId: string) => void;
+  changePeoplePayment: (id: string, steakId: string) => void;
 };
 
 type InitialState = Omit<UseSteaksProps, 'actions'>;
@@ -44,6 +57,8 @@ export const useSteaks = create(
               const newSteakData = {
                 ...steak,
                 id: generateId(),
+                peoples: [],
+                amountPayed: 0,
               };
 
               state.steaks = [newSteakData, ...state.steaks];
@@ -52,6 +67,79 @@ export const useSteaks = create(
           removeSteak: (id: string) => {
             setState(state => {
               state.steaks = state.steaks.filter(steak => steak.id !== id);
+            });
+          },
+          addPeople: (people: CreatePeopleData, steakId: string) => {
+            setState(state => {
+              const currentSteak = state.steaks.find(
+                steak => steak.id === steakId,
+              );
+
+              if (currentSteak) {
+                const newPeople = {
+                  ...people,
+                  id: generateId(),
+                  isPayed: false,
+                };
+
+                currentSteak.peoples = [...currentSteak.peoples, newPeople];
+              }
+            });
+          },
+          removePeople: (peopleId: string, steakId: string) => {
+            setState(state => {
+              const currentSteak = state.steaks.find(
+                steak => steak.id === steakId,
+              );
+
+              if (currentSteak) {
+                const currentPeople = currentSteak.peoples.find(
+                  people => people.id === peopleId,
+                );
+
+                if (currentPeople) {
+                  currentSteak.peoples = currentSteak.peoples.filter(
+                    people => people.id !== peopleId,
+                  );
+
+                  const payedAmount = currentSteak.peoples
+                    .filter(people => people.isPayed)
+                    .reduce(
+                      (accumulator, currentValue) =>
+                        accumulator + currentValue.amount,
+                      0,
+                    );
+
+                  currentSteak.amountPayed = payedAmount;
+                }
+              }
+            });
+          },
+          changePeoplePayment: (id: string, steakId: string) => {
+            setState(state => {
+              const currentSteak = state.steaks.find(
+                steak => steak.id === steakId,
+              );
+
+              if (currentSteak) {
+                const currentPeople = currentSteak.peoples.find(
+                  people => people.id === id,
+                );
+
+                if (currentPeople) {
+                  currentPeople.isPayed = !currentPeople.isPayed;
+
+                  const payedAmount = currentSteak.peoples
+                    .filter(people => people.isPayed)
+                    .reduce(
+                      (accumulator, currentValue) =>
+                        accumulator + currentValue.amount,
+                      0,
+                    );
+
+                  currentSteak.amountPayed = payedAmount;
+                }
+              }
             });
           },
         },

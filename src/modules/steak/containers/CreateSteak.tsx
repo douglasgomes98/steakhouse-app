@@ -226,7 +226,7 @@ export function CreateSteak() {
               )}
             </FormControl>
 
-            <Button type="submit" w="100%" mb="4">
+            <Button type="submit" w="100%" mb="4" colorScheme="blue">
               {t('create-steak.createSteakButtonLabel')}
             </Button>
 

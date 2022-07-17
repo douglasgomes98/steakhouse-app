@@ -37,18 +37,20 @@ export function Dashboard() {
         pl="1"
         pr="1"
       >
-        {steaks.map(({ id, date, description, observation }) => (
-          <WrapItem key={id}>
-            <SteakCard
-              date={date}
-              description={description}
-              observation={observation}
-              amountPeople={0}
-              amountCollected={0}
-              onClick={() => navigate(routes.createEditSteakRoute(id))}
-            />
-          </WrapItem>
-        ))}
+        {steaks.map(
+          ({ id, date, description, observation, peoples, amountPayed }) => (
+            <WrapItem key={id}>
+              <SteakCard
+                date={date}
+                description={description}
+                observation={observation}
+                amountPeople={peoples.length}
+                amountCollected={amountPayed}
+                onClick={() => navigate(routes.createEditSteakRoute(id))}
+              />
+            </WrapItem>
+          ),
+        )}
         <WrapItem>
           <CreateSteakButton />
         </WrapItem>

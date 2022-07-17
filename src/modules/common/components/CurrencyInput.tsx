@@ -19,9 +19,9 @@ type CustomInput = Omit<InputProps, 'value' | 'onChange'>;
 
 type CustomNumberFormatProps = Omit<NumberFormatPropsBase<any>, 'onChange'>;
 
-interface CustomCurrencyInput {
+type CustomCurrencyInput = {
   initialValue?: number | null;
-}
+};
 
 export type CurrencyInputProps = CustomCurrencyInput &
   CustomInput &

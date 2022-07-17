@@ -5,9 +5,9 @@ import { useAuthentication } from '@/hooks';
 import { parseQueryParams } from '@/helpers';
 import { routes } from '../constants/routes';
 
-export interface AuthRouteProps {
+export type AuthRouteProps = {
   children: ReactNode;
-}
+};
 
 export function AuthRoute({ children }: AuthRouteProps) {
   const location = useLocation();

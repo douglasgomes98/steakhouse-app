@@ -6,9 +6,9 @@ import { mountQueryParams } from '@/helpers';
 import { redirectRoutesBlackList } from '../constants/redirectRoutesBlackList';
 import { routes } from '../constants/routes';
 
-export interface ProtectedRouteProps {
+export type ProtectedRouteProps = {
   children: ReactNode;
-}
+};
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const location = useLocation();
