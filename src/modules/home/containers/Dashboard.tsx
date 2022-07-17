@@ -1,5 +1,6 @@
 import { useSteaks } from '@/hooks';
 import { Header } from '@/modules/common/components/Header';
+import { routes } from '@/routers/constants/routes';
 import {
   Container,
   Center,
@@ -9,11 +10,13 @@ import {
   useMediaQuery,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { CreateSteakButton } from './components/CreateSteakButton';
 import { SteakCard } from './components/SteakCard';
 
 export function Dashboard() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { steaks } = useSteaks();
 
   const [centerCards] = useMediaQuery('(max-width: 1025px)');
@@ -41,6 +44,7 @@ export function Dashboard() {
               description={description}
               amountPeople={0}
               amountCollected={0}
+              onClick={() => navigate(routes.createEditSteakRoute(id))}
             />
           </WrapItem>
         ))}

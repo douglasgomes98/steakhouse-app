@@ -14,6 +14,9 @@ const { Dashboard } = lazily(
 const { CreateSteak } = lazily(
   () => import('@/modules/steak/containers/CreateSteak'),
 );
+const { EditSteak } = lazily(
+  () => import('@/modules/steak/containers/EditSteak'),
+);
 
 export function AppRoutes() {
   return (
@@ -47,6 +50,17 @@ export function AppRoutes() {
             <Suspense fallback={<>loading...</>}>
               <ProtectedRoute>
                 <CreateSteak />
+              </ProtectedRoute>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path={routes.editSteak}
+          element={
+            <Suspense fallback={<>loading...</>}>
+              <ProtectedRoute>
+                <EditSteak />
               </ProtectedRoute>
             </Suspense>
           }

@@ -2,12 +2,14 @@ import { formatCurrency, formatDate } from '@/helpers';
 import { Button, Flex, Heading, Text, Icon } from '@chakra-ui/react';
 import { FaUsers } from 'react-icons/fa';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri';
+import { MouseEvent } from 'react';
 
 export type SteakCardProps = {
   date: Date;
   description: string;
   amountPeople: number;
   amountCollected: number;
+  onClick: (event: MouseEvent) => void;
 };
 
 export function SteakCard({
@@ -15,6 +17,7 @@ export function SteakCard({
   description,
   amountPeople,
   amountCollected,
+  onClick,
 }: SteakCardProps) {
   return (
     <Button
@@ -28,10 +31,11 @@ export function SteakCard({
       _hover={{
         bg: 'gray.100',
       }}
+      onClick={onClick}
     >
       <Flex mb="2">
         <Text fontSize="2xl" fontWeight="bold">
-          {formatDate(date, 'monthAndYear')}
+          {formatDate(date, 'brazilian')}
         </Text>
       </Flex>
 

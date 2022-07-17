@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 
 const templates = {
   monthAndYear: 'MM/yyyy',
+  brazilian: 'dd/MM/yyyy',
 };
 
 export function formatDate(
