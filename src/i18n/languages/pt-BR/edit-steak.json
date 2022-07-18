@@ -1,0 +1,20 @@
+{
+  "edit-steak.addPeopleSuccessMessage": "Participante adicionado com sucesso!",
+  "edit-steak.modalAddPeopleTitle": "Adicionar participante",
+  "edit-steak.withoutBeerLabel": "Sem cerveja",
+  "edit-steak.withBeerLabel": "Com cerveja",
+  "edit-steak.cancelAddPeopleButtonLabel": "Cancelar",
+  "edit-steak.confirmAddPeopleButtonLabel": "Adicionar",
+  "edit-steak.removeSteakSuccessMessage": "Churras deletado com sucesso!",
+  "edit-steak.steakNotFoundTitle": "Churras não encontrado",
+  "edit-steak.steakNotFoundButtonLabel": "Ver churras adicionados",
+  "edit-steak.pageTitle": "Editando Churras",
+  "edit-steak.withoutBeerDescription": "Valor sem cerveja",
+  "edit-steak.withBeerDescription": "Valor sem cerveja",
+  "edit-steak.peoplesDescription": "Participantes",
+  "edit-steak.addPeopleButtonLabel": "Adicionar",
+  "edit-steak.removePeopleTitle": "Remover participante",
+  "edit-steak.removePeopleDescription": "Deseja remover <strong>{people.name}</strong> do churras?",
+  "edit-steak.removePeopleButtonLabel": "Sim",
+  "edit-steak.removeSteakButtonLabel": "Apagar Churras"
+}

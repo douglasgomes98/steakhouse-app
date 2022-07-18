@@ -47,18 +47,6 @@ export function Login() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const redirectUrl = useMemo(() => {
-    const params = parseQueryParams(location.search)?.redirect;
-
-    if (!params) return null;
-
-    if (Array.isArray(params)) {
-      return params.join(',');
-    }
-
-    return String(params);
-  }, [location]);
-
   const { actions } = useAuthentication();
 
   const {
@@ -75,6 +63,18 @@ export function Login() {
   const toast = useToast({
     position: 'top-right',
   });
+
+  const redirectUrl = useMemo(() => {
+    const params = parseQueryParams(location.search)?.redirect;
+
+    if (!params) return null;
+
+    if (Array.isArray(params)) {
+      return params.join(',');
+    }
+
+    return String(params);
+  }, [location]);
 
   const onSubmit = handleSubmit(async ({ email, password }) => {
     if (email !== 'steakhouse@mail.com' || password !== '12345678') {

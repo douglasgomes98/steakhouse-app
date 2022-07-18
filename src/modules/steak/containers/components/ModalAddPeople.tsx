@@ -20,6 +20,8 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSteaks } from '@/hooks';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 export type ModalAddPeopleProps = {
   isOpen: boolean;
@@ -35,7 +37,7 @@ type FormData = {
 };
 
 const schema = yup.object().shape({
-  name: yup.string().required(),
+  name: yup.string().required(i18next.t('validation.nameRequired')),
   withBeer: yup.string().required(),
 });
 
@@ -46,6 +48,8 @@ export function ModalAddPeople({
   minValueWithBeer,
   minValueWithoutBeer,
 }: ModalAddPeopleProps) {
+  const { t } = useTranslation();
+
   const {
     register,
     handleSubmit,
@@ -80,7 +84,7 @@ export function ModalAddPeople({
     );
 
     toast({
-      title: 'Participante adicionado com sucesso!',
+      title: t('edit-steak.addPeopleSuccessMessage'),
       status: 'success',
       duration: 5000,
       isClosable: true,
@@ -98,16 +102,16 @@ export function ModalAddPeople({
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Adicionar participante</ModalHeader>
+        <ModalHeader>{t('edit-steak.modalAddPeopleTitle')}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <form onSubmit={onSubmit} id="form-add-people">
             <FormControl isInvalid={!!errors.name} mb="4">
-              <FormLabel htmlFor="name">Nome</FormLabel>
+              <FormLabel htmlFor="name">{t('common.inputNameLabel')}</FormLabel>
               <Input
                 id="name"
                 type="text"
-                placeholder="Insira o nome"
+                placeholder={t('common.inputNamePlaceholder')}
                 autoFocus
                 {...register('name')}
               />
@@ -121,8 +125,10 @@ export function ModalAddPeople({
               value={getValues().withBeer}
             >
               <Stack {...register('withBeer')}>
-                <Radio value="withoutBeer">Sem cerveja</Radio>
-                <Radio value="withBeer">Com cerveja</Radio>
+                <Radio value="withoutBeer">
+                  {t('edit-steak.withoutBeerLabel')}
+                </Radio>
+                <Radio value="withBeer">{t('edit-steak.withBeerLabel')}</Radio>
               </Stack>
             </RadioGroup>
           </form>
@@ -130,10 +136,10 @@ export function ModalAddPeople({
 
         <ModalFooter>
           <Button variant="outline" mr={3} onClick={onClose}>
-            Cancelar
+            {t('edit-steak.cancelAddPeopleButtonLabel')}
           </Button>
           <Button type="submit" form="form-add-people" colorScheme="blue">
-            Adicionar
+            {t('edit-steak.confirmAddPeopleButtonLabel')}
           </Button>
         </ModalFooter>
       </ModalContent>

@@ -9,5 +9,6 @@
   "validation.minValueWithoutBeerRequired": "Valor mínimo sem cerveja é um campo obrigatório",
   "validation.minValueWithoutBeerInvalid": "Valor mínimo sem cerveja inválido",
   "validation.minValueWithBeerRequired": "Valor mínimo com cerveja é um campo obrigatório",
-  "validation.minValueWithBeerInvalid": "Valor mínimo com cerveja inválido"
+  "validation.minValueWithBeerInvalid": "Valor mínimo com cerveja inválido",
+  "validation.nameRequired": "Nome é um campo obrigatório"
 }

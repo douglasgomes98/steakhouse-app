@@ -13,5 +13,7 @@
   "common.inputMinValueWithoutBeerLabel": "Valor mínimo sem cerveja",
   "common.inputMinValueWithoutBeerPlaceholder": "Insira o valor mínimo sem cerveja",
   "common.inputMinValueWithBeerLabel": "Valor mínimo com cerveja",
-  "common.inputMinValueWithBeerPlaceholder": "Insira o valor mínimo com cerveja"
+  "common.inputMinValueWithBeerPlaceholder": "Insira o valor mínimo com cerveja",
+  "common.inputNameLabel": "Nome",
+  "common.inputNamePlaceholder": "Insira o nome"
 }

@@ -24,16 +24,22 @@ import {
   PopoverFooter,
 } from '@chakra-ui/react';
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaUsers } from 'react-icons/fa';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ModalAddPeople } from './components/ModalAddPeople';
 
 export function EditSteak() {
+  const { t } = useTranslation();
   const params = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const { steaks, actions } = useSteaks();
+
+  const toast = useToast({
+    position: 'top-right',
+  });
 
   const [modalAddPeopleIsOpen, setModalAddPeopleIsOpen] = useState(false);
 
@@ -45,17 +51,13 @@ export function EditSteak() {
     setModalAddPeopleIsOpen(false);
   }, []);
 
-  const toast = useToast({
-    position: 'top-right',
-  });
-
   function handleDeleteSteak() {
     if (!currentSteak) return;
 
     actions.removeSteak(currentSteak.id);
 
     toast({
-      title: 'Churras deletado com sucesso!',
+      title: t('edit-steak.removeSteakSuccessMessage'),
       status: 'success',
       duration: 5000,
       isClosable: true,
@@ -76,11 +78,13 @@ export function EditSteak() {
     return (
       <Container maxW="container.lg" pb="8">
         <Center p="8">
-          <Heading>Churras não encontrado</Heading>
+          <Heading>{t('edit-steak.steakNotFoundTitle')}</Heading>
         </Center>
 
         <Center p="8">
-          <Button onClick={handleGoBack}>Ver churras adicionados</Button>
+          <Button onClick={handleGoBack}>
+            {t('edit-steak.steakNotFoundButtonLabel')}
+          </Button>
         </Center>
       </Container>
     );
@@ -90,7 +94,7 @@ export function EditSteak() {
     <>
       <Container maxW="container.lg" pb="8">
         <Center p="8">
-          <Heading>Editando Churras</Heading>
+          <Heading>{t('edit-steak.pageTitle')}</Heading>
         </Center>
 
         <Center>
@@ -136,11 +140,15 @@ export function EditSteak() {
             </Flex>
 
             <Box mb="1">
-              <Badge>{`Valor sem cerveja ${formatCurrency(
+              <Badge>{`${t(
+                'edit-steak.withoutBeerDescription',
+              )} ${formatCurrency(
                 currentSteak.minValueWithoutBeerByPeople,
               )}`}</Badge>
               <br />
-              <Badge colorScheme="green">{` Valor com cerveja
+              <Badge colorScheme="green">{`${t(
+                'edit-steak.withBeerDescription',
+              )}
                 ${formatCurrency(currentSteak.minValueWithBeerByPeople)}
               `}</Badge>
             </Box>
@@ -158,10 +166,12 @@ export function EditSteak() {
               align="center"
               mb={currentSteak.peoples.length > 1 ? '4' : ''}
             >
-              <Heading fontSize="lg">Participantes</Heading>
+              <Heading fontSize="lg">
+                {t('edit-steak.peoplesDescription')}
+              </Heading>
 
               <Button onClick={() => setModalAddPeopleIsOpen(true)}>
-                Adicionar
+                {t('edit-steak.addPeopleButtonLabel')}
               </Button>
             </Flex>
 
@@ -204,9 +214,11 @@ export function EditSteak() {
                 <PopoverContent bg="gray.50">
                   <PopoverArrow bg="gray.50" />
                   <PopoverCloseButton />
-                  <PopoverHeader>Remover participante</PopoverHeader>
+                  <PopoverHeader>
+                    {t('edit-steak.removePeopleTitle')}
+                  </PopoverHeader>
                   <PopoverBody>
-                    Deseja remover <strong>{people.name}</strong> do churras?
+                    {t('edit-steak.removePeopleDescription')}
                   </PopoverBody>
                   <PopoverFooter display="flex" justifyContent="flex-end">
                     <ButtonGroup size="sm">
@@ -216,7 +228,7 @@ export function EditSteak() {
                           actions.removePeople(people.id, currentSteak.id)
                         }
                       >
-                        Sim
+                        {t('edit-steak.removePeopleButtonLabel')}
                       </Button>
                     </ButtonGroup>
                   </PopoverFooter>
@@ -234,7 +246,7 @@ export function EditSteak() {
               w="100%"
               onClick={handleDeleteSteak}
             >
-              Apagar Churras
+              {t('edit-steak.removeSteakButtonLabel')}
             </Button>
           </Box>
         </Center>
