@@ -24,7 +24,7 @@ import {
   PopoverFooter,
 } from '@chakra-ui/react';
 import { useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { FaUsers } from 'react-icons/fa';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -218,7 +218,12 @@ export function EditSteak() {
                     {t('edit-steak.removePeopleTitle')}
                   </PopoverHeader>
                   <PopoverBody>
-                    {t('edit-steak.removePeopleDescription')}
+                    <Trans
+                      i18nKey="edit-steak.removePeopleDescription"
+                      values={{
+                        name: people.name,
+                      }}
+                    />
                   </PopoverBody>
                   <PopoverFooter display="flex" justifyContent="flex-end">
                     <ButtonGroup size="sm">

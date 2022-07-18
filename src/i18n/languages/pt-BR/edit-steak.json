@@ -14,7 +14,7 @@
   "edit-steak.peoplesDescription": "Participantes",
   "edit-steak.addPeopleButtonLabel": "Adicionar",
   "edit-steak.removePeopleTitle": "Remover participante",
-  "edit-steak.removePeopleDescription": "Deseja remover <strong>{people.name}</strong> do churras?",
+  "edit-steak.removePeopleDescription": "Deseja remover <strong>{{name}}</strong> do churras?",
   "edit-steak.removePeopleButtonLabel": "Sim",
   "edit-steak.removeSteakButtonLabel": "Apagar Churras"
 }
