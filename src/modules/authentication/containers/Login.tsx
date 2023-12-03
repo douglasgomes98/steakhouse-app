@@ -12,9 +12,8 @@ import {
   InputRightElement,
   IconButton,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -23,22 +22,20 @@ import { parseQueryParams } from '@/helpers';
 import { routes } from '@/routers/constants/routes';
 import { useAuthentication } from '@/hooks';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { z } from 'zod';
 
-type FormData = {
-  email: string;
-  password: string;
-};
-
-const schema = yup.object().shape({
-  email: yup
+const schema = z.object({
+  email: z
     .string()
-    .email(i18next.t('validation.emailInvalid'))
-    .required(i18next.t('validation.emailRequired')),
-  password: yup
+    .min(1, { message: i18next.t('validation.emailRequired') })
+    .email({ message: i18next.t('validation.emailInvalid') }),
+  password: z
     .string()
-    .min(8, i18next.t('validation.passwordMinLength'))
-    .required(i18next.t('validation.passwordRequired')),
+    .min(1, i18next.t('validation.passwordRequired'))
+    .min(8, { message: i18next.t('validation.passwordMinLength') }),
 });
+
+type FormData = z.infer<typeof schema>;
 
 export function Login() {
   const { t } = useTranslation();
@@ -49,13 +46,9 @@ export function Login() {
 
   const { actions } = useAuthentication();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
+  const { handleSubmit, control } = useForm<FormData>({
     mode: 'onChange',
-    resolver: yupResolver(schema as any),
+    resolver: zodResolver(schema),
     shouldUnregister: true,
     shouldFocusError: true,
   });
@@ -76,7 +69,7 @@ export function Login() {
     return String(params);
   }, [location]);
 
-  const onSubmit = handleSubmit(async ({ email, password }) => {
+  const onSubmit = handleSubmit(({ email, password }) => {
     if (email !== 'steakhouse@mail.com' || password !== '12345678') {
       toast({
         title: t('login.invalidCredentials'),
@@ -101,50 +94,70 @@ export function Login() {
         </Heading>
 
         <form onSubmit={onSubmit}>
-          <FormControl isInvalid={!!errors.email} mb="4">
-            <FormLabel htmlFor="email">{t('common.inputEmailLabel')}</FormLabel>
-            <Input
-              id="email"
-              type="email"
-              placeholder={t('common.inputEmailPlaceholder')}
-              autoFocus
-              {...register('email')}
-            />
-            {errors.email && (
-              <FormErrorMessage>{errors.email.message}</FormErrorMessage>
-            )}
-          </FormControl>
-
-          <FormControl isInvalid={!!errors.password} mb="4">
-            <FormLabel htmlFor="password">
-              {t('common.inputPasswordLabel')}
-            </FormLabel>
-            <InputGroup>
-              <Input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                placeholder={t('common.inputPasswordPlaceholder')}
-                {...register('password')}
-              />
-              <InputRightElement width="2rem">
-                <IconButton
-                  icon={
-                    showPassword ? (
-                      <AiOutlineEyeInvisible size="1.5rem" />
-                    ) : (
-                      <AiOutlineEye size="1.5rem" />
-                    )
-                  }
-                  aria-label="icon-password"
-                  variant="unstyled"
-                  onClick={() => setShowPassword(prevState => !prevState)}
+          <Controller
+            control={control}
+            name="email"
+            render={({ field, fieldState }) => (
+              <FormControl isInvalid={fieldState.invalid} mb="4">
+                <FormLabel htmlFor="email">
+                  {t('common.inputEmailLabel')}
+                </FormLabel>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder={t('common.inputEmailPlaceholder')}
+                  autoFocus
+                  value={field.value}
+                  onChange={event => field.onChange(event.target.value)}
                 />
-              </InputRightElement>
-            </InputGroup>
-            {errors.password && (
-              <FormErrorMessage>{errors.password.message}</FormErrorMessage>
+                {fieldState.error?.message && (
+                  <FormErrorMessage>
+                    {fieldState.error?.message}
+                  </FormErrorMessage>
+                )}
+              </FormControl>
             )}
-          </FormControl>
+          />
+
+          <Controller
+            control={control}
+            name="password"
+            render={({ field, fieldState }) => (
+              <FormControl isInvalid={fieldState.invalid} mb="4">
+                <FormLabel htmlFor="password">
+                  {t('common.inputPasswordLabel')}
+                </FormLabel>
+                <InputGroup>
+                  <Input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder={t('common.inputPasswordPlaceholder')}
+                    value={field.value}
+                    onChange={event => field.onChange(event.target.value)}
+                  />
+                  <InputRightElement width="2rem">
+                    <IconButton
+                      icon={
+                        showPassword ? (
+                          <AiOutlineEyeInvisible size="1.5rem" />
+                        ) : (
+                          <AiOutlineEye size="1.5rem" />
+                        )
+                      }
+                      aria-label="icon-password"
+                      variant="unstyled"
+                      onClick={() => setShowPassword(prevState => !prevState)}
+                    />
+                  </InputRightElement>
+                </InputGroup>
+                {fieldState.error?.message && (
+                  <FormErrorMessage>
+                    {fieldState.error?.message}
+                  </FormErrorMessage>
+                )}
+              </FormControl>
+            )}
+          />
 
           <Button type="submit" w="100%">
             {t('login.loginButtonLabel')}
