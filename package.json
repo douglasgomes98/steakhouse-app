@@ -10,6 +10,9 @@
     "lint:fix": "yarn eslint --max-warnings=0 --fix src && yarn prettier --write src",
     "preview": "vite preview"
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
     "@chakra-ui/react": "^2.2.1",
     "@emotion/react": "^11",
