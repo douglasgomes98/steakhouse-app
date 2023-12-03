@@ -14,7 +14,7 @@ import {
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { MaskedInput } from '@/modules/common/components/MaskedInput';
+import { InputCurrency } from '@/modules/common/components/InputCurrency';
 import {
   dateIsValid,
   parseDate,
@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { useSteaks } from '@/hooks';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '@/routers/constants/routes';
-import { CurrencyInput } from '@/modules/common/components/CurrencyInput';
+import { InputMasked } from '@/modules/common/components/InputMasked';
 
 type FormData = {
   description: string;
@@ -84,7 +84,7 @@ export function CreateSteak() {
     formState: { errors },
   } = useForm<FormData>({
     mode: 'onChange',
-    resolver: yupResolver<yup.AnyObjectSchema>(schema),
+    resolver: yupResolver(schema as any),
     shouldUnregister: true,
     shouldFocusError: true,
     defaultValues: {
@@ -160,7 +160,7 @@ export function CreateSteak() {
 
             <FormControl isInvalid={!!errors.date} mb="4">
               <FormLabel htmlFor="date">{t('common.inputDateLabel')}</FormLabel>
-              <MaskedInput
+              <InputMasked
                 id="date"
                 placeholder={t('common.inputDatePlaceholder')}
                 {...register('date')}
@@ -194,10 +194,10 @@ export function CreateSteak() {
               <FormLabel htmlFor="minValueWithoutBeer">
                 {t('common.inputMinValueWithoutBeerLabel')}
               </FormLabel>
-              <CurrencyInput
+              <InputCurrency
                 id="minValueWithoutBeer"
                 placeholder={t('common.inputMinValueWithoutBeerPlaceholder')}
-                onValueChange={({ floatValue }) => {
+                onChange={({ floatValue }) => {
                   handleInputChange(floatValue, 'minValueWithoutBeer');
                 }}
               />
@@ -212,10 +212,10 @@ export function CreateSteak() {
               <FormLabel htmlFor="minValueWithBeer">
                 {t('common.inputMinValueWithBeerLabel')}
               </FormLabel>
-              <CurrencyInput
+              <InputCurrency
                 id="minValueWithBeer"
                 placeholder={t('common.inputMinValueWithBeerPlaceholder')}
-                onValueChange={({ floatValue }) => {
+                onChange={({ floatValue }) => {
                   handleInputChange(floatValue, 'minValueWithBeer');
                 }}
               />

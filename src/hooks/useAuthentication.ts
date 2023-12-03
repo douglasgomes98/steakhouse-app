@@ -1,6 +1,6 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import produce from 'immer';
+import { produce } from 'immer';
 
 type UseAuthenticationProps = {
   isAuthenticated: boolean;
@@ -18,8 +18,8 @@ const initialState: InitialState = {
   isAuthenticated: false,
 };
 
-export const useAuthentication = create(
-  persist<UseAuthenticationProps>(
+export const useAuthentication = create<UseAuthenticationProps>()(
+  persist(
     set => {
       const setState = (fn: (state: UseAuthenticationProps) => void) =>
         set(produce(fn));

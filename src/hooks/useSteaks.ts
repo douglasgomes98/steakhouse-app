@@ -1,6 +1,6 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import produce from 'immer';
+import { produce } from 'immer';
 import { generateId } from '@/helpers';
 
 type UseSteaksProps = {
@@ -43,8 +43,8 @@ const initialState: InitialState = {
   steaks: [],
 };
 
-export const useSteaks = create(
-  persist<UseSteaksProps>(
+export const useSteaks = create<UseSteaksProps>()(
+  persist(
     set => {
       const setState = (fn: (state: UseSteaksProps) => void) =>
         set(produce(fn));

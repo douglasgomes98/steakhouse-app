@@ -55,7 +55,7 @@ export function Login() {
     formState: { errors },
   } = useForm<FormData>({
     mode: 'onChange',
-    resolver: yupResolver<yup.AnyObjectSchema>(schema),
+    resolver: yupResolver(schema as any),
     shouldUnregister: true,
     shouldFocusError: true,
   });

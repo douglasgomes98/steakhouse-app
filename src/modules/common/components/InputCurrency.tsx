@@ -7,60 +7,51 @@ import {
   useMemo,
   useCallback,
 } from 'react';
-import NumberFormat, {
-  NumberFormatPropsBase,
+import {
+  NumericFormatProps,
   NumberFormatValues,
   SourceInfo,
+  NumberFormatBase,
+  NumberFormatBaseProps,
+  PatternFormatProps,
+  OnValueChange,
 } from 'react-number-format';
 
 import { Input, InputProps } from '@chakra-ui/react';
+import { formatCurrency } from '@/helpers';
 
 type CustomInput = Omit<InputProps, 'value' | 'onChange'>;
 
-type CustomNumberFormatProps = Omit<NumberFormatPropsBase<any>, 'onChange'>;
+type CustomNumberFormatProps = Omit<
+  NumberFormatBaseProps & NumericFormatProps & PatternFormatProps,
+  'value' | 'onChange' | 'format' | 'onValueChange'
+>;
 
-type CustomCurrencyInput = {
-  initialValue?: number | null;
-};
+interface CustomInputCurrency {
+  value?: number | null;
+  onChange?: OnValueChange;
+}
 
-export type CurrencyInputProps = CustomCurrencyInput &
+export type InputCurrencyProps = CustomInputCurrency &
   CustomInput &
   CustomNumberFormatProps;
 
-const currencyFormatter = (formatted_value: string) => {
-  if (!Number(formatted_value)) return 'R$ 0.00';
-
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  }).format(Number(formatted_value) / 100);
-};
-
-export const parseToCurrency = (formatted_value: number) => {
-  if (!Number(formatted_value)) return 'R$ 0.00';
-
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  }).format(Number(formatted_value));
-};
-
-export const parseValueToNumber = (formatted_value: string) => {
+export function parseValueToNumber(formatted_value: string) {
   if (!formatted_value) return 0;
 
   return Number(formatted_value.replace(/[^0-9.-]+/g, ''));
-};
+}
 
-export const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
-  ({ onValueChange, initialValue, ...props }, ref) => {
+export const InputCurrency = forwardRef<HTMLInputElement, InputCurrencyProps>(
+  ({ onChange, value, ...props }, ref) => {
     const [currentValue, setCurrentValue] = useState<number>(0);
 
     useEffect(() => {
-      if (!initialValue) return;
-      if (typeof initialValue === 'string') return;
+      if (!value) return;
+      if (typeof value === 'string') return;
 
-      setCurrentValue(initialValue * 10000);
-    }, [initialValue]);
+      setCurrentValue(value * 10000);
+    }, [value]);
 
     const handleFocus = useCallback(
       (event: FocusEvent<HTMLInputElement>) => event.target.select(),
@@ -70,14 +61,14 @@ export const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
     const handleChange = useCallback(
       (values: NumberFormatValues, sourceInfo: SourceInfo) => {
         setCurrentValue(parseFloat(values.value) * 100);
-        if (onValueChange) {
-          onValueChange(
+        if (onChange) {
+          onChange(
             { ...values, floatValue: Number(values.floatValue) / 100 },
             sourceInfo,
           );
         }
       },
-      [onValueChange],
+      [onChange],
     );
 
     const keyDown = useCallback(
@@ -94,18 +85,20 @@ export const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
       [currentValue],
     );
 
+    const currencyFormatter = useCallback((formatted_value: string) => {
+      if (!Number(formatted_value)) return formatCurrency(0);
+
+      return formatCurrency(Number(formatted_value) / 100);
+    }, []);
+
     const valueFormatted = useMemo(() => {
       return currentValue / 100;
     }, [currentValue]);
 
     return (
-      <NumberFormat
+      <NumberFormatBase
         getInputRef={ref}
-        customInput={Input}
-        allowEmptyFormatting
-        decimalSeparator=","
-        thousandSeparator="."
-        decimalScale={2}
+        customInput={Input as any}
         value={valueFormatted}
         format={currencyFormatter}
         onKeyDown={keyDown}
