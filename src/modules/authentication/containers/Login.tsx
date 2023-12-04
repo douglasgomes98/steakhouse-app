@@ -26,12 +26,12 @@ import { z } from 'zod';
 
 const schema = z.object({
   email: z
-    .string()
-    .min(1, { message: i18next.t('validation.emailRequired') })
+    .string({ required_error: i18next.t('validation.emailRequired') })
     .email({ message: i18next.t('validation.emailInvalid') }),
   password: z
-    .string()
-    .min(1, i18next.t('validation.passwordRequired'))
+    .string({
+      required_error: i18next.t('validation.passwordRequired'),
+    })
     .min(8, { message: i18next.t('validation.passwordMinLength') }),
 });
 
@@ -46,11 +46,13 @@ export function Login() {
 
   const { actions } = useAuthentication();
 
-  const { handleSubmit, control } = useForm<FormData>({
+  const {
+    handleSubmit,
+    control,
+    formState: { isValid },
+  } = useForm<FormData>({
     mode: 'onChange',
     resolver: zodResolver(schema),
-    shouldUnregister: true,
-    shouldFocusError: true,
   });
 
   const toast = useToast({
@@ -130,6 +132,7 @@ export function Login() {
                 <InputGroup>
                   <Input
                     id="password"
+                    role="textbox"
                     type={showPassword ? 'text' : 'password'}
                     placeholder={t('common.inputPasswordPlaceholder')}
                     value={field.value}
@@ -159,7 +162,7 @@ export function Login() {
             )}
           />
 
-          <Button type="submit" w="100%">
+          <Button type="submit" w="100%" isDisabled={!isValid}>
             {t('login.loginButtonLabel')}
           </Button>
         </form>
