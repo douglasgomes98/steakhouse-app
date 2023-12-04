@@ -46,11 +46,7 @@ export function Login() {
 
   const { actions } = useAuthentication();
 
-  const {
-    handleSubmit,
-    control,
-    formState: { isValid },
-  } = useForm<FormData>({
+  const { handleSubmit, control } = useForm<FormData>({
     mode: 'onChange',
     resolver: zodResolver(schema),
   });
@@ -162,7 +158,7 @@ export function Login() {
             )}
           />
 
-          <Button type="submit" w="100%" isDisabled={!isValid}>
+          <Button type="submit" w="100%">
             {t('login.loginButtonLabel')}
           </Button>
         </form>

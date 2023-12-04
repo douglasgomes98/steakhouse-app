@@ -31,7 +31,7 @@ describe('Login', () => {
     expect(buttonSubmit).toBeInTheDocument();
     expect(inputEmail).toHaveValue('');
     expect(inputPassword).toHaveValue('');
-    expect(buttonSubmit).toBeDisabled();
+    expect(buttonSubmit).not.toBeDisabled();
   });
 
   test("should display an error message if the user doesn't fill correctly fields", async () => {
@@ -39,7 +39,19 @@ describe('Login', () => {
 
     expect(inputEmail).toHaveValue('');
     expect(inputPassword).toHaveValue('');
-    expect(buttonSubmit).toBeDisabled();
+    expect(buttonSubmit).not.toBeDisabled();
+
+    fireEvent.click(buttonSubmit);
+
+    await waitFor(() => {
+      expect(buttonSubmit).not.toBeDisabled();
+      expect(
+        screen.queryByText(/e-mail é um campo obrigatório/i),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByText(/senha é um campo obrigatório/i),
+      ).toBeInTheDocument();
+    });
 
     fireEvent.change(inputEmail, { target: { value: 'any_email' } });
     fireEvent.change(inputPassword, { target: { value: '12345' } });
@@ -48,7 +60,7 @@ describe('Login', () => {
       expect(inputEmail).toHaveValue('any_email');
       expect(inputPassword).toHaveValue('12345');
 
-      expect(buttonSubmit).toBeDisabled();
+      expect(buttonSubmit).not.toBeDisabled();
       expect(screen.queryByText(/e-mail inválido/i)).toBeInTheDocument();
       expect(
         screen.queryByText(/senha deve ter pelo menos 8 caracteres/i),
@@ -56,12 +68,12 @@ describe('Login', () => {
     });
   });
 
-  test('should display an error message if the user fills correctly fields', async () => {
+  test('should not display an error message if the user fills correctly fields', async () => {
     const { inputEmail, inputPassword, buttonSubmit } = makeSut();
 
     expect(inputEmail).toHaveValue('');
     expect(inputPassword).toHaveValue('');
-    expect(buttonSubmit).toBeDisabled();
+    expect(buttonSubmit).not.toBeDisabled();
 
     fireEvent.change(inputEmail, {
       target: { value: 'jhondoe@email.com' },

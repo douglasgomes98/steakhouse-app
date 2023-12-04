@@ -11,12 +11,10 @@ import {
   useToast,
   Textarea,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { InputCurrency } from '@/modules/common/components/InputCurrency';
 import {
-  dateIsValid,
   parseDate,
   dateIsAfter,
   dateToStartDay,
@@ -28,65 +26,52 @@ import { useSteaks } from '@/hooks';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '@/routers/constants/routes';
 import { InputMasked } from '@/modules/common/components/InputMasked';
+import { z } from 'zod';
 
-type FormData = {
-  description: string;
-  date: string;
-  observation?: string;
-  minValueWithoutBeer: number;
-  minValueWithBeer: number;
-};
-
-const schema = yup.object().shape({
-  description: yup
-    .string()
-    .required(i18next.t('validation.descriptionRequired')),
-  date: yup
-    .string()
-    .required(i18next.t('validation.dateRequired'))
-    .test('date', i18next.t('validation.dateInvalid'), value => {
-      if (!value) return false;
-
-      return dateIsValid(parseDate(value, 'brazilian'));
+const schema = z.object({
+  description: z
+    .string({
+      required_error: i18next.t('validation.descriptionRequired'),
     })
-    .test('date', i18next.t('validation.dateInvalid'), value => {
-      if (!value) return false;
+    .min(1, { message: i18next.t('validation.descriptionRequired') }),
+  date: z
+    .string({ required_error: i18next.t('validation.dateRequired') })
+    .refine(
+      value => {
+        const dateParsed = parseDate(value, 'brazilian');
+        if (!dateParsed) return false;
 
-      const dateParsed = parseDate(value, 'brazilian');
-      if (!dateParsed) return false;
-
-      return dateIsAfter(
-        dateToStartDay(addDaysInDate(new Date(), -1)),
-        dateToStartDay(dateParsed),
-      );
-    }),
-  observation: yup.string().nullable(),
-  minValueWithoutBeer: yup
-    .number()
-    .required(i18next.t('validation.minValueWithoutBeerRequired'))
-    .min(1, i18next.t('validation.minValueWithoutBeerInvalid')),
-  minValueWithBeer: yup
-    .number()
-    .required(i18next.t('validation.minValueWithBeerRequired'))
-    .min(1, i18next.t('validation.minValueWithBeerInvalid')),
+        return dateIsAfter(
+          dateToStartDay(addDaysInDate(new Date(), -1)),
+          dateToStartDay(dateParsed),
+        );
+      },
+      { message: i18next.t('validation.dateInvalid') },
+    ),
+  observation: z.string().optional(),
+  minValueWithoutBeer: z
+    .number({
+      coerce: true,
+      required_error: i18next.t('validation.minValueWithoutBeerRequired'),
+    })
+    .min(1, { message: i18next.t('validation.minValueWithoutBeerInvalid') }),
+  minValueWithBeer: z
+    .number({
+      coerce: true,
+      required_error: i18next.t('validation.minValueWithBeerRequired'),
+    })
+    .min(1, { message: i18next.t('validation.minValueWithBeerInvalid') }),
 });
+
+type FormData = z.infer<typeof schema>;
 
 export function CreateSteak() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    trigger,
-    getValues,
-    formState: { errors },
-  } = useForm<FormData>({
+  const { handleSubmit, control } = useForm<FormData>({
     mode: 'onChange',
-    resolver: yupResolver(schema as any),
-    shouldUnregister: true,
-    shouldFocusError: true,
+    resolver: zodResolver(schema),
     defaultValues: {
       minValueWithoutBeer: 0,
       minValueWithBeer: 0,
@@ -126,11 +111,6 @@ export function CreateSteak() {
     },
   );
 
-  function handleInputChange(value: any, key: keyof FormData) {
-    setValue(key, value);
-    trigger(key);
-  }
-
   return (
     <Container maxW="container.lg" pb="8">
       <Center p="8">
@@ -140,91 +120,120 @@ export function CreateSteak() {
       <Center>
         <Box w="20rem">
           <form onSubmit={onSubmit}>
-            <FormControl isInvalid={!!errors.description} mb="4">
-              <FormLabel htmlFor="description">
-                {t('common.inputDescriptionLabel')}
-              </FormLabel>
-              <Input
-                id="description"
-                type="text"
-                placeholder={t('common.inputDescriptionPlaceholder')}
-                autoFocus
-                {...register('description')}
-              />
-              {errors.description && (
-                <FormErrorMessage>
-                  {errors.description.message}
-                </FormErrorMessage>
+            <Controller
+              control={control}
+              name="description"
+              render={({ field, fieldState }) => (
+                <FormControl isInvalid={fieldState.invalid} mb="4">
+                  <FormLabel htmlFor="description">
+                    {t('common.inputDescriptionLabel')}
+                  </FormLabel>
+                  <Input
+                    id="description"
+                    placeholder={t('common.inputDescriptionPlaceholder')}
+                    autoFocus
+                    value={field.value}
+                    onChange={event => field.onChange(event.target.value)}
+                  />
+                  {fieldState.error?.message && (
+                    <FormErrorMessage>
+                      {fieldState.error?.message}
+                    </FormErrorMessage>
+                  )}
+                </FormControl>
               )}
-            </FormControl>
+            />
 
-            <FormControl isInvalid={!!errors.date} mb="4">
-              <FormLabel htmlFor="date">{t('common.inputDateLabel')}</FormLabel>
-              <InputMasked
-                id="date"
-                placeholder={t('common.inputDatePlaceholder')}
-                {...register('date')}
-                format="##/##/####"
-                mask={['D', 'D', 'M', 'M', 'A', 'A', 'A', 'A']}
-                onChange={value => handleInputChange(value, 'date')}
-                value={getValues().date}
-              />
-              {errors.date && (
-                <FormErrorMessage>{errors.date.message}</FormErrorMessage>
+            <Controller
+              control={control}
+              name="date"
+              render={({ field, fieldState }) => (
+                <FormControl isInvalid={fieldState.invalid} mb="4">
+                  <FormLabel htmlFor="date">
+                    {t('common.inputDateLabel')}
+                  </FormLabel>
+                  <InputMasked
+                    id="date"
+                    placeholder={t('common.inputDatePlaceholder')}
+                    format="##/##/####"
+                    mask={['D', 'D', 'M', 'M', 'A', 'A', 'A', 'A']}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                  {fieldState.error?.message && (
+                    <FormErrorMessage>
+                      {fieldState.error?.message}
+                    </FormErrorMessage>
+                  )}
+                </FormControl>
               )}
-            </FormControl>
+            />
 
-            <FormControl isInvalid={!!errors.observation} mb="4">
-              <FormLabel htmlFor="observation">
-                {t('common.inputObservationLabel')}
-              </FormLabel>
-              <Textarea
-                id="observation"
-                placeholder={t('common.inputObservationPlaceholder')}
-                {...register('observation')}
-              />
-              {errors.observation && (
-                <FormErrorMessage>
-                  {errors.observation.message}
-                </FormErrorMessage>
+            <Controller
+              control={control}
+              name="observation"
+              render={({ field }) => (
+                <FormControl mb="4">
+                  <FormLabel htmlFor="observation">
+                    {t('common.inputObservationLabel')}
+                  </FormLabel>
+                  <Textarea
+                    id="observation"
+                    placeholder={t('common.inputObservationPlaceholder')}
+                    value={field.value}
+                    onChange={event => field.onChange(event.target.value)}
+                  />
+                </FormControl>
               )}
-            </FormControl>
+            />
 
-            <FormControl isInvalid={!!errors.minValueWithoutBeer} mb="4">
-              <FormLabel htmlFor="minValueWithoutBeer">
-                {t('common.inputMinValueWithoutBeerLabel')}
-              </FormLabel>
-              <InputCurrency
-                id="minValueWithoutBeer"
-                placeholder={t('common.inputMinValueWithoutBeerPlaceholder')}
-                onChange={({ floatValue }) => {
-                  handleInputChange(floatValue, 'minValueWithoutBeer');
-                }}
-              />
-              {errors.minValueWithoutBeer && (
-                <FormErrorMessage>
-                  {errors.minValueWithoutBeer.message}
-                </FormErrorMessage>
+            <Controller
+              control={control}
+              name="minValueWithoutBeer"
+              render={({ field, fieldState }) => (
+                <FormControl isInvalid={fieldState.invalid} mb="4">
+                  <FormLabel htmlFor="minValueWithoutBeer">
+                    {t('common.inputMinValueWithoutBeerLabel')}
+                  </FormLabel>
+                  <InputCurrency
+                    id="minValueWithoutBeer"
+                    placeholder={t(
+                      'common.inputMinValueWithoutBeerPlaceholder',
+                    )}
+                    value={field.value}
+                    onChange={({ floatValue }) => field.onChange(floatValue)}
+                  />
+                  {fieldState.error?.message && (
+                    <FormErrorMessage>
+                      {fieldState.error?.message}
+                    </FormErrorMessage>
+                  )}
+                </FormControl>
               )}
-            </FormControl>
+            />
 
-            <FormControl isInvalid={!!errors.minValueWithBeer} mb="4">
-              <FormLabel htmlFor="minValueWithBeer">
-                {t('common.inputMinValueWithBeerLabel')}
-              </FormLabel>
-              <InputCurrency
-                id="minValueWithBeer"
-                placeholder={t('common.inputMinValueWithBeerPlaceholder')}
-                onChange={({ floatValue }) => {
-                  handleInputChange(floatValue, 'minValueWithBeer');
-                }}
-              />
-              {errors.minValueWithBeer && (
-                <FormErrorMessage>
-                  {errors.minValueWithBeer.message}
-                </FormErrorMessage>
+            <Controller
+              control={control}
+              name="minValueWithBeer"
+              render={({ field, fieldState }) => (
+                <FormControl isInvalid={fieldState.invalid} mb="4">
+                  <FormLabel htmlFor="minValueWithBeer">
+                    {t('common.inputMinValueWithBeerLabel')}
+                  </FormLabel>
+                  <InputCurrency
+                    id="minValueWithBeer"
+                    placeholder={t('common.inputMinValueWithBeerPlaceholder')}
+                    value={field.value}
+                    onChange={({ floatValue }) => field.onChange(floatValue)}
+                  />
+                  {fieldState.error?.message && (
+                    <FormErrorMessage>
+                      {fieldState.error?.message}
+                    </FormErrorMessage>
+                  )}
+                </FormControl>
               )}
-            </FormControl>
+            />
 
             <Button type="submit" w="100%" mb="4" colorScheme="blue">
               {t('create-steak.createSteakButtonLabel')}
