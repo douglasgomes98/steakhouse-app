@@ -16,12 +16,13 @@ import {
   Stack,
   useToast,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useForm } from 'react-hook-form';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useSteaks } from '@/hooks';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
+import { z } from 'zod';
 
 export type ModalAddPeopleProps = {
   isOpen: boolean;
@@ -31,15 +32,16 @@ export type ModalAddPeopleProps = {
   minValueWithBeer: number;
 };
 
-type FormData = {
-  name: string;
-  withBeer: string;
-};
-
-const schema = yup.object().shape({
-  name: yup.string().required(i18next.t('validation.nameRequired')),
-  withBeer: yup.string().required(),
+const schema = z.object({
+  name: z
+    .string({
+      required_error: i18next.t('validation.nameRequired'),
+    })
+    .min(1, i18next.t('validation.nameRequired')),
+  withBeer: z.enum(['withoutBeer', 'withBeer']),
 });
+
+type FormData = z.infer<typeof schema>;
 
 export function ModalAddPeople({
   isOpen,
@@ -50,18 +52,9 @@ export function ModalAddPeople({
 }: ModalAddPeopleProps) {
   const { t } = useTranslation();
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    trigger,
-    getValues,
-    formState: { errors },
-  } = useForm<FormData>({
+  const { handleSubmit, control } = useForm<FormData>({
     mode: 'onChange',
-    resolver: yupResolver(schema as any),
-    shouldUnregister: true,
-    shouldFocusError: true,
+    resolver: zodResolver(schema),
     defaultValues: {
       withBeer: 'withoutBeer',
     },
@@ -93,11 +86,6 @@ export function ModalAddPeople({
     onClose();
   });
 
-  function handleChangeRadio(value: string) {
-    setValue('withBeer', value);
-    trigger('withBeer');
-  }
-
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -106,31 +94,48 @@ export function ModalAddPeople({
         <ModalCloseButton />
         <ModalBody>
           <form onSubmit={onSubmit} id="form-add-people">
-            <FormControl isInvalid={!!errors.name} mb="4">
-              <FormLabel htmlFor="name">{t('common.inputNameLabel')}</FormLabel>
-              <Input
-                id="name"
-                type="text"
-                placeholder={t('common.inputNamePlaceholder')}
-                autoFocus
-                {...register('name')}
-              />
-              {errors.name && (
-                <FormErrorMessage>{errors.name.message}</FormErrorMessage>
+            <Controller
+              control={control}
+              name="name"
+              render={({ field, fieldState }) => (
+                <FormControl isInvalid={fieldState.invalid} mb="4">
+                  <FormLabel htmlFor="name">
+                    <FormLabel htmlFor="name">
+                      {t('common.inputNameLabel')}
+                    </FormLabel>
+                  </FormLabel>
+                  <Input
+                    id="name"
+                    placeholder={t('common.inputNamePlaceholder')}
+                    autoFocus
+                    value={field.value}
+                    onChange={event => field.onChange(event.target.value)}
+                  />
+                  {fieldState.error?.message && (
+                    <FormErrorMessage>
+                      {fieldState.error?.message}
+                    </FormErrorMessage>
+                  )}
+                </FormControl>
               )}
-            </FormControl>
+            />
 
-            <RadioGroup
-              onChange={handleChangeRadio}
-              value={getValues().withBeer}
-            >
-              <Stack {...register('withBeer')}>
-                <Radio value="withoutBeer">
-                  {t('edit-steak.withoutBeerLabel')}
-                </Radio>
-                <Radio value="withBeer">{t('edit-steak.withBeerLabel')}</Radio>
-              </Stack>
-            </RadioGroup>
+            <Controller
+              control={control}
+              name="withBeer"
+              render={({ field }) => (
+                <RadioGroup onChange={field.onChange} value={field.value}>
+                  <Stack>
+                    <Radio value="withoutBeer">
+                      {t('edit-steak.withoutBeerLabel')}
+                    </Radio>
+                    <Radio value="withBeer">
+                      {t('edit-steak.withBeerLabel')}
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
+              )}
+            />
           </form>
         </ModalBody>
 
