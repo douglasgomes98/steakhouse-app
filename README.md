@@ -14,7 +14,7 @@ password: 12345678
 
 Se você quiser fazer alguma modificação no código precisará ter instalado em sua máquina as seguintes ferramentas:
 
-- [NodeJS >= 16.14.0](https://nodejs.org/en/)
+- [NodeJS >= 18.17.1](https://nodejs.org/en/)
 
 ## ⬇ 1. Pull
 
