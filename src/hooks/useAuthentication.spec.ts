@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 import { useAuthentication } from './useAuthentication';
 
 describe('useAuthentication', () => {
@@ -12,26 +12,26 @@ describe('useAuthentication', () => {
   test('should change isAuthenticated when call login', async () => {
     const { result } = renderHook(() => useAuthentication());
 
-    result.current.actions.login();
-
-    await waitFor(() => {
-      expect(result.current.isAuthenticated).toBe(true);
+    act(() => {
+      result.current.actions.login();
     });
+
+    expect(result.current.isAuthenticated).toBe(true);
   });
 
   test('should change isAuthenticated when call logout', async () => {
     const { result } = renderHook(() => useAuthentication());
 
-    result.current.actions.login();
-
-    await waitFor(() => {
-      expect(result.current.isAuthenticated).toBe(true);
+    act(() => {
+      result.current.actions.login();
     });
 
-    result.current.actions.logout();
+    expect(result.current.isAuthenticated).toBe(true);
 
-    await waitFor(() => {
-      expect(result.current.isAuthenticated).toBe(false);
+    act(() => {
+      result.current.actions.logout();
     });
+
+    expect(result.current.isAuthenticated).toBe(false);
   });
 });
