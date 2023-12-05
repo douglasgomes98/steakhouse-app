@@ -60,11 +60,14 @@ As seguintes tecnologias foram utilizadas no desenvolvimento do projeto.
 
 <br>
 <a href="https://github.com/douglasgomes98">
- <img style="border-radius: 35%;" src="https://avatars.githubusercontent.com/u/47008462?v=4" width="100px;" alt=""/>
- <br />
- <sub><b>Douglas Gomes</b></sub></a> <a href="https://github.com/douglasgomes98" title="Douglas Gomes">🚀</a>
+<img style="border-radius: 35%;" src="https://avatars.githubusercontent.com/u/47008462?v=4" width="100px;" alt=""/>
+<br />
+<sub><b>Douglas Gomes</b></sub></a> <a href="https://github.com/douglasgomes98" title="Douglas Gomes"></a>
+<br />
+<br />
 
 Feito por Douglas Gomes, entre em contato!✌🏻
+<br />
 
  <p align="left">
     <a href="mailto:douglasgomes.rr@gmail.com" alt="Gmail" target="_blank">
